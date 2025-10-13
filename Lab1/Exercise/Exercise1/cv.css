@@ -1,0 +1,49 @@
+h1 {
+    font-size: 30px;
+}
+
+h2 {
+    font-size: 27px;
+    margin-left:5px;
+}
+
+h3 {
+    font-weight: normal;
+    text-decoration: underline;
+    font-size: 24px;
+    margin-left:10px;
+}
+
+body {
+    margin-left: 70px;
+    margin-right: 70px;
+    margin-top: 70px;
+    background-color: black;
+    color: white;
+    line-height: 1.25;
+}
+
+a {
+    font-size: 20px;
+    color: cornflowerblue;
+    margin-left: 20px;
+}
+
+p {
+    margin-left: 20px;
+    font-size: 20px;
+}
+
+li {
+    font-size: 20px;
+}
+
+hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+div {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}

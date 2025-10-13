@@ -1,0 +1,111 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+    background-color: rgb(2, 2, 43);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+    width: 95%;
+    min-height: 95vh;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.header {
+    background-color: white;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-evenly;
+    height: 20vh;   
+    width: 100%;
+    border-radius: 10px;
+}
+
+.header img {
+    width: 150px;
+    height: 150px;
+}
+
+.header h1 {
+    font-size: 45px;
+    color: navy;
+}
+
+.header p {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.body {
+    background-color: white;
+    min-height: 70vh;
+    width: 100%;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 0 25px;
+    border-radius: 10px;
+}
+
+.body .body-content {
+    flex: 1 1 500px; 
+    max-width: 700px; 
+}
+.body .body-content h2 {
+    font-size:25px;
+    color: navy;
+}
+
+.body .body-content a {
+    color:navy
+}
+
+.body .body-content a:hover {
+    color: blue;
+}
+
+.body .body-content a:after {
+    color:blueviolet;
+}
+
+.body .body-card { 
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 350px; 
+    max-width: 900px; 
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: rgb(61, 61, 107);
+    /* color: rgb(190, 189, 189); */
+    color:rgb(169, 169, 214);
+    padding: 0 20px;
+}
+
+.body .body-card h2 {
+    font-size: 25px;
+    color: white;
+}
+
+.body .body-card h3 {
+    font-size: 20px;
+    color: white;
+}
+
+.footer {
+    border-radius: 10px;
+    background-color: white;
+    height: 5vh;   
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
