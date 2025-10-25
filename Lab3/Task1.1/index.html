@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Task 1.1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --green: #197d3e;
+            --red: #851717;
+            --gray: #d1d5db;
+            --text: #111827;
+            --muted: #6b7280;
+            --bg: #f9fafb;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 24px;
+            display: flex;
+            align-content: center;
+            justify-content: center;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 460px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, .05);
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: 20px;
+        }
+
+        p.intro {
+            margin: 0 0 20px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .field {
+            margin-bottom: 14px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        input {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 10px 12px;
+            font-size: 16px;
+            border: 2px solid var(--gray);
+            border-radius: 8px;
+            outline: none;
+            transition: border-color .15s ease;
+            background: #fff;
+        }
+
+        input.is-valid {
+            border-color: var(--green);
+        }
+
+        input.is-invalid {
+            border-color: var(--red);
+        }
+
+        .error {
+            min-height: 18px;
+            font-size: 12px;
+            color: var(--red);
+            margin: 6px 0 0;
+        }
+
+        button[type="submit"] {
+            margin-top: 6px;
+            width: 100%;
+            padding: 12px;
+            border: 0;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #111827;
+            color: white;
+            transition: opacity .15s ease, transform .02s ease-in-out;
+        }
+
+        button[disabled] {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
+        button:not([disabled]):active {
+            transform: translateY(1px);
+        }
+
+        small.hint {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <form class="card" id="signupForm" novalidate>
+        <h1>My Form</h1>
+        <p class="intro">You have to input all fields.</p>
+
+        <div class="field">
+            <label for="username">Username</label>
+            <input id="username" name="username" type="text" required placeholder="yourname" inputmode="text" />
+            <small class="hint">4–20 characters, letters and numbers only.</small>
+            <p class="error" id="usernameError" aria-live="polite"></p>
+        </div>
+
+        <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required placeholder="you@example.com" />
+            <p class="error" id="emailError" aria-live="polite"></p>
+        </div>
+
+        <div class="field">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" required placeholder="••••••••" />
+            <small class="hint">At least 8 characters, with ≥1 uppercase letter and ≥1 number.</small>
+            <p class="error" id="passwordError" aria-live="polite"></p>
+        </div>
+
+        <div class="field">
+            <label for="confirm">Confirm Password</label>
+            <input id="confirm" name="confirm" type="password" required placeholder="Repeat password" />
+            <p class="error" id="confirmError" aria-live="polite"></p>
+        </div>
+
+        <button id="submitBtn" type="submit" disabled>Submit</button>
+    </form>
+
+    <script>
+        function validateUsername(username) {
+            return /^[A-Za-z0-9]{4,20}$/.test(username);
+        }
+
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function validatePassword(password) {
+            return /^(?=.*[A-Z])(?=.*\d).{8,}$/.test(password);
+        }
+
+        function validatePasswordMatch(pass1, pass2) {
+            return pass1.length > 0 && pass1 === pass2;
+        }
+
+        function setValidity(inputEl, isValid, errorEl, errorMessage = "") {
+            inputEl.classList.remove("is-valid", "is-invalid");
+            if (isValid) {
+                inputEl.classList.add("is-valid");
+                errorEl.textContent = "";
+            } else {
+                inputEl.classList.add("is-invalid");
+                errorEl.textContent = errorMessage;
+            }
+        }
+
+        function validateForm() {
+            const username = document.getElementById("username");
+            const email = document.getElementById("email");
+            const password = document.getElementById("password");
+            const confirm = document.getElementById("confirm");
+
+            const uOK = validateUsername(username.value);
+            const eOK = validateEmail(email.value);
+            const pOK = validatePassword(password.value);
+            const cOK = validatePasswordMatch(password.value, confirm.value);
+
+            setValidity(username, uOK, document.getElementById("usernameError"),
+                "Username must be 4–20 letters/numbers (no spaces or symbols).");
+
+            setValidity(email, eOK, document.getElementById("emailError"),
+                "Please enter a valid email address.");
+
+            setValidity(password, pOK, document.getElementById("passwordError"),
+                "Min 8 chars, include an uppercase letter and a number.");
+
+            setValidity(confirm, cOK, document.getElementById("confirmError"),
+                "Passwords must match.");
+
+            const allValid = uOK && eOK && pOK && cOK;
+            document.getElementById("submitBtn").disabled = !allValid;
+            return allValid;
+        }
+
+        const form = document.getElementById("signupForm");
+        ["username", "email", "password", "confirm"].forEach(id => {
+            document.getElementById(id).addEventListener("input", validateForm);
+            document.getElementById(id).addEventListener("blur", validateForm);
+        });
+
+        form.addEventListener("submit", (e) => {
+            if (!validateForm()) {
+                e.preventDefault();
+                return;
+            }
+            e.preventDefault();
+            alert("Form is valid.");
+        });
+        validateForm();
+    </script>
+</body>
+
+</html>

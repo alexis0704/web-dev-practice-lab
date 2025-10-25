@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Shopping Cart — Task 1.2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --edge: #e5e7eb;
+            --text: #0f172a;
+            --muted: #64748b;
+            --accent: #111827;
+            --ok: #16a34a;
+            --danger: #dc2626;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text)
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: var(--card);
+            border-bottom: 1px solid var(--edge);
+            position: sticky;
+            top: 0
+        }
+
+        .brand {
+            font-weight: 700
+        }
+
+        .cart-icon {
+            position: relative;
+            display: inline-flex;
+            gap: 8px;
+            align-items: center
+        }
+
+        .cart-bubble {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: var(--danger);
+            color: #fff;
+            border-radius: 999px;
+            min-width: 18px;
+            height: 18px;
+            display: grid;
+            place-items: center;
+            font-size: 11px;
+            padding: 0 5px
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 20px;
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 0 16px
+        }
+
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--edge);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, .04)
+        }
+
+        h2 {
+            margin: 0 0 12px;
+            font-size: 18px
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 14px
+        }
+
+        .product {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border: 1px solid var(--edge);
+            border-radius: 10px;
+            padding: 12px
+        }
+
+        .p-top {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .emoji {
+            font-size: 32px
+        }
+
+        .p-name {
+            font-weight: 600
+        }
+
+        .p-price {
+            color: var(--muted)
+        }
+
+        .add-btn {
+            margin-top: auto;
+            width: 100%;
+            padding: 10px;
+            border: 0;
+            border-radius: 8px;
+            background: var(--accent);
+            color: #fff;
+            cursor: pointer
+        }
+
+        .add-btn:active {
+            transform: translateY(1px)
+        }
+
+        .cart {
+            display: flex;
+            flex-direction: column;
+            gap: 12px
+        }
+
+        .empty {
+            color: var(--muted);
+            text-align: center;
+            padding: 20px;
+            border: 1px dashed var(--edge);
+            border-radius: 10px
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 38px 1fr auto;
+            gap: 10px;
+            align-items: center;
+            border: 1px solid var(--edge);
+            border-radius: 10px;
+            padding: 10px
+        }
+
+        .cart-emoji {
+            font-size: 24px
+        }
+
+        .ci-name {
+            font-weight: 600
+        }
+
+        .ci-price {
+            color: var(--muted);
+            font-size: 14px
+        }
+
+        .qty {
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid var(--edge);
+            border-radius: 8px;
+            overflow: hidden
+        }
+
+        .qty button {
+            border: 0;
+            background: #f3f4f6;
+            padding: 6px 10px;
+            cursor: pointer
+        }
+
+        .qty input {
+            width: 40px;
+            text-align: center;
+            border: 0;
+            padding: 6px 0
+        }
+
+        .remove {
+            background: transparent;
+            border: 0;
+            color: var(--danger);
+            cursor: pointer
+        }
+
+        .right {
+            text-align: right
+        }
+
+        .subtotal {
+            font-weight: 600
+        }
+
+        .total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4px;
+            padding-top: 8px;
+            border-top: 1px dashed var(--edge);
+            font-weight: 700
+        }
+
+        .checkout {
+            width: 100%;
+            padding: 10px;
+            border: 0;
+            border-radius: 8px;
+            background: var(--ok);
+            color: #fff;
+            cursor: pointer
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="brand">🛒 Mini Shop</div>
+        <div class="cart-icon" aria-label="Cart">
+            <span>Cart</span>
+            <span id="cartCount" class="cart-bubble">0</span>
+        </div>
+    </header>
+
+    <main class="layout">
+        <section class="card">
+            <h2>Products</h2>
+            <div id="products" class="products"></div>
+        </section>
+
+        <aside class="card">
+            <h2>Your Cart</h2>
+            <div id="cart" class="cart"></div>
+            <div id="totalRow" class="total" style="display:none">
+                <span>Total</span>
+                <span id="totalPrice">$0.00</span>
+            </div>
+            <button id="checkoutBtn" class="checkout" style="display:none">Checkout</button>
+        </aside>
+    </main>
+
+    <script>
+        const products = [
+            { id: 'p1', name: 'Laptop', emoji: '💻', price: 999.99 },
+            { id: 'p2', name: 'Smartphone', emoji: '📱', price: 699.99 },
+            { id: 'p3', name: 'Headphones', emoji: '🎧', price: 199.99 },
+            { id: 'p4', name: 'Smartwatch', emoji: '⌚', price: 299.99 },
+        ];
+        const cart = new Map();
+
+        const fmt = n => n.toLocaleString(undefined, { style: 'currency', currency: 'USD' });
+
+        function addToCart(productId) {
+            const item = cart.get(productId);
+            if (item) {
+                item.qty += 1;
+            } else {
+                cart.set(productId, { id: productId, productId, qty: 1 });
+            }
+            renderCart();
+        }
+
+        function removeFromCart(itemId) {
+            cart.delete(itemId);
+            renderCart();
+        }
+
+        function updateQuantity(itemId, quantity) {
+            const q = Math.max(0, Math.min(99, Number(quantity) || 0));
+            const item = cart.get(itemId);
+            if (!item) return;
+
+            if (q === 0) {
+                cart.delete(itemId);
+            } else {
+                item.qty = q;
+            }
+            renderCart();
+        }
+
+        function calculateTotal() {
+            let total = 0;
+            for (const [, item] of cart) {
+                const product = products.find(p => p.id === item.productId);
+                total += product.price * item.qty;
+            }
+            return total;
+        }
+
+        function renderProducts() {
+            const container = document.getElementById('products');
+            container.innerHTML = '';
+            for (const p of products) {
+                const el = document.createElement('div');
+                el.className = 'product';
+                el.innerHTML = `
+          <div class="p-top">
+            <div class="emoji" aria-hidden="true">${p.emoji}</div>
+            <div>
+              <div class="p-name">${p.name}</div>
+              <div class="p-price">${fmt(p.price)}</div>
+            </div>
+          </div>
+          <button class="add-btn" aria-label="Add ${p.name} to cart">Add to Cart</button>
+        `;
+                el.querySelector('.add-btn').addEventListener('click', () => addToCart(p.id));
+                container.appendChild(el);
+            }
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart');
+            const countBubble = document.getElementById('cartCount');
+            const totalRow = document.getElementById('totalRow');
+            const totalPrice = document.getElementById('totalPrice');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+
+            container.innerHTML = '';
+
+            if (cart.size === 0) {
+                container.innerHTML = `<div class="empty">Your cart is empty.</div>`;
+                countBubble.textContent = '0';
+                totalRow.style.display = 'none';
+                checkoutBtn.style.display = 'none';
+                return;
+            }
+
+            let totalCount = 0;
+            for (const [, item] of cart) {
+                const product = products.find(p => p.id === item.productId);
+                totalCount += item.qty;
+
+                const row = document.createElement('div');
+                row.className = 'cart-item';
+                row.innerHTML = `
+          <div class="cart-emoji">${product.emoji}</div>
+          <div>
+            <div class="ci-name">${product.name}</div>
+            <div class="ci-price">${fmt(product.price)} each</div>
+            <div class="qty" aria-label="Quantity controls for ${product.name}">
+              <button type="button" aria-label="Decrease">−</button>
+              <input type="text" inputmode="numeric" value="${item.qty}" aria-label="Quantity input" />
+              <button type="button" aria-label="Increase">+</button>
+            </div>
+          </div>
+          <div class="right">
+            <div class="subtotal">${fmt(product.price * item.qty)}</div>
+            <button class="remove" aria-label="Remove ${product.name}">Remove</button>
+          </div>
+        `;
+
+                const [decBtn, qtyInput, incBtn] = row.querySelectorAll('.qty > *');
+
+                decBtn.addEventListener('click', () => updateQuantity(item.id, item.qty - 1));
+                incBtn.addEventListener('click', () => updateQuantity(item.id, item.qty + 1));
+
+                qtyInput.addEventListener('input', (e) => {
+                    const raw = e.target.value.replace(/[^\d]/g, '');
+                    e.target.value = raw;
+                });
+                qtyInput.addEventListener('blur', (e) => updateQuantity(item.id, e.target.value));
+                qtyInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        updateQuantity(item.id, e.target.value);
+                    }
+                });
+
+                row.querySelector('.remove').addEventListener('click', () => removeFromCart(item.id));
+                container.appendChild(row);
+            }
+
+            countBubble.textContent = String(totalCount);
+            totalRow.style.display = '';
+            totalPrice.textContent = fmt(calculateTotal());
+            checkoutBtn.style.display = '';
+            checkoutBtn.onclick = () => alert(`Total: ${fmt(calculateTotal())}\n(Checkout flow demo)`);
+        }
+
+        renderProducts();
+        renderCart();
+    </script>
+</body>
+
+</html>
