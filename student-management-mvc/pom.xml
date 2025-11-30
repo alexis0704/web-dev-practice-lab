@@ -10,7 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>Student Management MVC L6</name>
+    <name>Student Management MVC L6 Practice</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

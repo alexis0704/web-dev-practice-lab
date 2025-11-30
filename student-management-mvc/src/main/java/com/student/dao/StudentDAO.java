@@ -10,7 +10,7 @@ public class StudentDAO {
     // Database configuration
     private static final String DB_URL = "jdbc:mysql://localhost:3306/student_management";
     private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "Kourleake80!";
+    private static final String DB_PASSWORD = "MyPassword!";
 
     // Get database connection
     private Connection getConnection() throws SQLException {
@@ -40,8 +40,8 @@ public class StudentDAO {
         String sql = "SELECT * FROM students ORDER BY id DESC";
 
         try (Connection conn = getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 students.add(mapRow(rs));
@@ -59,7 +59,7 @@ public class StudentDAO {
         String sql = "SELECT * FROM students WHERE id = ?";
 
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -80,7 +80,7 @@ public class StudentDAO {
         String sql = "INSERT INTO students (student_code, full_name, email, major) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, student.getStudentCode());
             pstmt.setString(2, student.getFullName());
@@ -101,7 +101,7 @@ public class StudentDAO {
         String sql = "UPDATE students SET student_code = ?, full_name = ?, email = ?, major = ? WHERE id = ?";
 
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, student.getStudentCode());
             pstmt.setString(2, student.getFullName());
@@ -123,7 +123,7 @@ public class StudentDAO {
         String sql = "DELETE FROM students WHERE id = ?";
 
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, id);
             int rowsAffected = pstmt.executeUpdate();
@@ -145,15 +145,15 @@ public class StudentDAO {
         String searchPattern = "%" + keyword + "%";
 
         String sql = """
-            SELECT * FROM students
-            WHERE student_code LIKE ? 
-               OR full_name LIKE ? 
-               OR email LIKE ?
-            ORDER BY id DESC
-            """;
+                SELECT * FROM students
+                WHERE student_code LIKE ?
+                   OR full_name LIKE ?
+                   OR email LIKE ?
+                ORDER BY id DESC
+                """;
 
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, searchPattern);
             pstmt.setString(2, searchPattern);
@@ -175,7 +175,8 @@ public class StudentDAO {
     // Sort, filter
 
     private String validateSortBy(String sortBy) {
-        if (sortBy == null) return "id";
+        if (sortBy == null)
+            return "id";
 
         switch (sortBy) {
             case "id":
@@ -205,8 +206,8 @@ public class StudentDAO {
         String sql = "SELECT * FROM students ORDER BY " + validSortBy + " " + validOrder;
 
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
                 students.add(mapRow(rs));
@@ -230,7 +231,7 @@ public class StudentDAO {
         String sql = "SELECT * FROM students WHERE major = ? ORDER BY id DESC";
 
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, major);
 
@@ -253,8 +254,8 @@ public class StudentDAO {
         String sql = "SELECT COUNT(*) FROM students";
 
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                ResultSet rs = pstmt.executeQuery()) {
 
             if (rs.next()) {
                 return rs.getInt(1);
@@ -272,7 +273,7 @@ public class StudentDAO {
         String sql = "SELECT * FROM students ORDER BY id DESC LIMIT ? OFFSET ?";
 
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, limit);
             pstmt.setInt(2, offset);
